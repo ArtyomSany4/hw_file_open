@@ -18,8 +18,6 @@ with open('recipes.txt', 'r', encoding="utf-8") as file:
         cook_book[dish_name] = ignridients
     # return cook_book
 
-# pprint(cook_book, sort_dicts=False)
-
 def get_shop_list_by_dishes(dishes, person_count):
     shop_list_by_dishes = {}
     for dish in dishes:
@@ -29,27 +27,29 @@ def get_shop_list_by_dishes(dishes, person_count):
             for el in ingr.values():
                 el_list.append(el)
             # print(el_list)
+            if el_list[0] in shop_list_by_dishes.keys():
+                val_dict['quantity'] = (int(el_list[1]) * person_count + int(shop_list_by_dishes[el_list[0]]['quantity']))
+            else:
+                val_dict['quantity'] = int(el_list[1]) * person_count
             val_dict['measure'] = el_list[2]
-            val_dict['quantity'] = int(el_list[1]) * person_count
             shop_list_by_dishes[el_list[0]] = val_dict
-            pprint(shop_list_by_dishes, sort_dicts=False)
-            # print()
-    # pprint(shop_list_by_dishes, sort_dicts=False)
     return shop_list_by_dishes
-            # val = ingr.values()
-
         
-        # if dish in cook_book.keys():
-        #     shop_list_by_dishes[cook_book[dish]] = cook_book.get(dish)
-        #     print(shop_list_by_dishes)
-        
-get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2) 
-# {
-#   'Картофель': {'measure': 'кг', 'quantity': 2},
-#   'Молоко': {'measure': 'мл', 'quantity': 200},
-#   'Помидор': {'measure': 'шт', 'quantity': 4},
-#   'Сыр гауда': {'measure': 'г', 'quantity': 200},
-#   'Яйцо': {'measure': 'шт', 'quantity': 4},
-#   'Чеснок': {'measure': 'зубч', 'quantity': 6}
-# }
+pprint(get_shop_list_by_dishes(['Запеченный картофель', 'Омлет', 'Фахитос'], 2), sort_dicts=False) 
 
+
+###############
+# Задача №3. Про объединение трех файлов в один
+content_dict = {}
+with open('1.txt', 'r', encoding="utf-8") as file1, open('2.txt', 'r', encoding="utf-8") as file2, open('3.txt', 'r', encoding="utf-8") as file3:
+    content_dict['1.txt'] = file1.readlines()
+    content_dict['2.txt'] = file2.readlines()
+    content_dict['3.txt'] = file3.readlines()
+
+for k, v in dict(sorted(content_dict.items(), reverse=True, key=lambda item: item[1])).items():
+    with open('result_file.txt', 'a', encoding="ANSI") as file:
+        file.write(k + '\n')
+        file.write(str(len(v))+ '\n')
+        file.writelines(v)
+        file.writelines('\n')
+print('Результат в файле result_file.txt в папке проекта.')
